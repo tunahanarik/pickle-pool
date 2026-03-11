@@ -24,11 +24,11 @@ interface QuestConfig {
 }
 
 const DEFAULT_CONFIG: QuestConfig = {
-  follow_url: 'https://x.com/PicklePool',
-  like_url: 'https://x.com/PicklePool/status/PLACEHOLDER',
-  repost_url: 'https://x.com/PicklePool/status/PLACEHOLDER',
-  comment_url: 'https://x.com/PicklePool/status/PLACEHOLDER',
-  follow_label: 'Follow @PicklePool',
+  follow_url: 'https://x.com/Picklepool_io',
+  like_url: 'https://x.com/Picklepool_io/status/PLACEHOLDER',
+  repost_url: 'https://x.com/Picklepool_io/status/PLACEHOLDER',
+  comment_url: 'https://x.com/Picklepool_io/status/PLACEHOLDER',
+  follow_label: 'Follow @Picklepool_io',
   follow_description: 'Turn on notifications 🔔',
   like_label: 'Like Our Post',
   like_description: 'Show some love 💚',
@@ -36,8 +36,8 @@ const DEFAULT_CONFIG: QuestConfig = {
   repost_description: 'Spread the word 🥒',
   comment_label: 'Comment on Post',
   comment_description: 'Drop your wallet and tag your friends 🫡',
-  qrt_template: '🥒 Just registered for @PicklePool FREE NFT Quest!\n\nComplete the quests and secure your spot for the mint 🔥\n\nDon\'t miss out 👇',
-  qrt_url: 'https://x.com/PicklePool/status/PLACEHOLDER',
+  qrt_template: '🥒 Just registered for @Picklepool_io FREE NFT Quest!\n\nComplete the quests and secure your spot for the mint 🔥\n\nDon\'t miss out 👇',
+  qrt_url: 'https://x.com/Picklepool_io/status/PLACEHOLDER',
 };
 
 export default function QuestWizard() {
@@ -74,8 +74,36 @@ export default function QuestWizard() {
     }
   }, [completedTasks]);
 
+  // Extract tweet ID from a twitter/x URL
+  const extractTweetId = (url: string): string => {
+    const match = url.match(/status\/([0-9]+)/);
+    return match ? match[1] : '';
+  };
+
+  // Extract username from a twitter/x profile URL
+  const extractUsername = (url: string): string => {
+    const match = url.match(/x\.com\/([^/]+)/) || url.match(/twitter\.com\/([^/]+)/);
+    return match ? match[1] : '';
+  };
+
   const handleTaskClick = useCallback((taskId: string, url: string) => {
-    window.open(url, '_blank');
+    let intentUrl = url;
+
+    if (taskId === 'follow') {
+      const username = extractUsername(url);
+      if (username) intentUrl = `https://x.com/intent/follow?screen_name=${username}`;
+    } else if (taskId === 'like') {
+      const tweetId = extractTweetId(url);
+      if (tweetId) intentUrl = `https://x.com/intent/like?tweet_id=${tweetId}`;
+    } else if (taskId === 'repost') {
+      const tweetId = extractTweetId(url);
+      if (tweetId) intentUrl = `https://x.com/intent/retweet?tweet_id=${tweetId}`;
+    } else if (taskId === 'comment') {
+      const tweetId = extractTweetId(url);
+      if (tweetId) intentUrl = `https://x.com/intent/tweet?in_reply_to=${tweetId}`;
+    }
+
+    window.open(intentUrl, '_blank', 'width=600,height=400');
     setTimeout(() => markTaskDone(taskId), 1000);
   }, [markTaskDone]);
 

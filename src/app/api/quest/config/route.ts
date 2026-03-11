@@ -12,11 +12,11 @@ export const dynamic = 'force-dynamic';
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'pickle-admin-2026';
 
 const DEFAULT_CONFIG: Record<string, string> = {
-  follow_url: 'https://x.com/PicklePool',
-  like_url: 'https://x.com/PicklePool/status/PLACEHOLDER',
-  repost_url: 'https://x.com/PicklePool/status/PLACEHOLDER',
-  comment_url: 'https://x.com/PicklePool/status/PLACEHOLDER',
-  follow_label: 'Follow @PicklePool',
+  follow_url: 'https://x.com/Picklepool_io',
+  like_url: 'https://x.com/Picklepool_io/status/PLACEHOLDER',
+  repost_url: 'https://x.com/Picklepool_io/status/PLACEHOLDER',
+  comment_url: 'https://x.com/Picklepool_io/status/PLACEHOLDER',
+  follow_label: 'Follow @Picklepool_io',
   follow_description: 'Turn on notifications 🔔',
   like_label: 'Like Our Post',
   like_description: 'Show some love 💚',
@@ -24,8 +24,8 @@ const DEFAULT_CONFIG: Record<string, string> = {
   repost_description: 'Spread the word 🥒',
   comment_label: 'Comment on Post',
   comment_description: 'Drop your wallet and tag your friends 🫡',
-  qrt_template: '🥒 Just registered for @PicklePool FREE NFT Quest!\n\nComplete the quests and secure your spot for the mint 🔥\n\nDon\'t miss out 👇',
-  qrt_url: 'https://x.com/PicklePool/status/PLACEHOLDER',
+  qrt_template: '🥒 Just registered for @Picklepool_io FREE NFT Quest!\n\nComplete the quests and secure your spot for the mint 🔥\n\nDon\'t miss out 👇',
+  qrt_url: 'https://x.com/Picklepool_io/status/PLACEHOLDER',
 };
 
 // In-memory config store (used when DB is unavailable)
