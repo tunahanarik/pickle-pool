@@ -98,9 +98,10 @@ export async function POST(request: NextRequest) {
       data: { id: registration.id },
     });
   } catch (error: unknown) {
-    console.error('Registration error:', error);
+    const errMsg = error instanceof Error ? error.message : String(error);
+    console.error('Registration error:', errMsg, error);
     return NextResponse.json(
-      { success: false, error: 'An unexpected error occurred. Please try again.' },
+      { success: false, error: `Registration failed: ${errMsg}` },
       { status: 500 }
     );
   }
