@@ -48,7 +48,17 @@ export default function QuestWizard() {
   const [error, setError] = useState('');
   const [commentClicked, setCommentClicked] = useState(false);
   const [commentProofUrl, setCommentProofUrl] = useState('');
+  const [transitioning, setTransitioning] = useState(false);
   const [config, setConfig] = useState<QuestConfig>(DEFAULT_CONFIG);
+
+  // Smooth screen transition
+  const navigateTo = useCallback((target: Screen) => {
+    setTransitioning(true);
+    setTimeout(() => {
+      setScreen(target);
+      setTransitioning(false);
+    }, 250);
+  }, []);
 
   // Fetch quest config on mount
   useEffect(() => {
@@ -96,7 +106,7 @@ export default function QuestWizard() {
     }
     setError('');
     setUsername(cleaned);
-    setScreen('quests');
+    navigateTo('quests');
   };
 
   const handleQuestsComplete = () => {
@@ -105,7 +115,7 @@ export default function QuestWizard() {
       return;
     }
     setError('');
-    setScreen('wallet');
+    navigateTo('wallet');
   };
 
   const handleWalletSubmit = async () => {
@@ -194,13 +204,13 @@ export default function QuestWizard() {
 
       {/* Top Nav */}
       <nav className={styles['quest-nav']}>
-        <a href="https://x.com/PicklePool" target="_blank" rel="noopener noreferrer" className={styles['quest-nav-link']}>
+        <a href={config.follow_url} target="_blank" rel="noopener noreferrer" className={styles['quest-nav-link']}>
           𝕏 Twitter
         </a>
       </nav>
 
       {/* Content */}
-      <div className={styles['quest-content']}>
+      <div className={`${styles['quest-content']} ${transitioning ? styles['quest-transitioning'] : ''}`}>
         {/* Logo */}
         <div className={styles['quest-logo']}>
           <Image src="/assets/collection/pickle_0006.png" alt="Pickle Pool" width={80} height={80} />
@@ -218,7 +228,7 @@ export default function QuestWizard() {
             <p className={styles['quest-landing-desc']}>
               Complete simple quests to register for the exclusive Pickle Pool FREE NFT mint
             </p>
-            <button className={styles['quest-btn-gold']} onClick={() => setScreen('username')}>
+            <button className={styles['quest-btn-gold']} onClick={() => navigateTo('username')}>
               🥒 Begin Quest
             </button>
           </>
@@ -374,7 +384,7 @@ export default function QuestWizard() {
             <button className={styles['quest-btn-gold']} onClick={handleWalletSubmit}>
               🥒 Submit Quest
             </button>
-            <button className={styles['quest-back']} onClick={() => setScreen('quests')}>
+            <button className={styles['quest-back']} onClick={() => navigateTo('quests')}>
               ← Back
             </button>
           </div>

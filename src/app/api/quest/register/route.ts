@@ -71,42 +71,32 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Try database registration, fallback to mock if DB unavailable
-    try {
-      // Check for duplicate twitter handle
-      const existingByHandle = await prisma.registration.findUnique({
-        where: { twitterHandle: cleanHandle },
-      });
+    // Check for duplicate twitter handle
+    const existingByHandle = await prisma.registration.findUnique({
+      where: { twitterHandle: cleanHandle },
+    });
 
-      if (existingByHandle) {
-        return NextResponse.json(
-          { success: false, error: 'This Twitter username has already been registered.' },
-          { status: 409 }
-        );
-      }
-
-      // Create registration
-      const registration = await prisma.registration.create({
-        data: {
-          twitterHandle: cleanHandle,
-          evmAddress: cleanAddress,
-          completedQuests: completedQuests || [],
-          ipAddress: ip,
-        },
-      });
-
-      return NextResponse.json({
-        success: true,
-        data: { id: registration.id },
-      });
-    } catch (dbError) {
-      // If database is unavailable (no PostgreSQL), return mock success for testing
-      console.warn('Database unavailable, returning mock registration:', dbError);
-      return NextResponse.json({
-        success: true,
-        data: { id: Math.floor(Math.random() * 100000), mock: true },
-      });
+    if (existingByHandle) {
+      return NextResponse.json(
+        { success: false, error: 'This Twitter username has already been registered.' },
+        { status: 409 }
+      );
     }
+
+    // Create registration
+    const registration = await prisma.registration.create({
+      data: {
+        twitterHandle: cleanHandle,
+        evmAddress: cleanAddress,
+        completedQuests: completedQuests || [],
+        ipAddress: ip,
+      },
+    });
+
+    return NextResponse.json({
+      success: true,
+      data: { id: registration.id },
+    });
   } catch (error: unknown) {
     console.error('Registration error:', error);
     return NextResponse.json(

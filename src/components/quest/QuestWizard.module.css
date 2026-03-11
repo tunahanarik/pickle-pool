@@ -44,6 +44,14 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.quest-transitioning {
+  opacity: 0;
+  transform: translateY(-12px);
 }
 
 /* ── Top Nav ── */
