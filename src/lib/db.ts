@@ -1,30 +1,29 @@
 /* ═══════════════════════════════════════
- * Prisma Client — Lazy Singleton
- * Only creates the client when first accessed (not at build time)
+ * Prisma Client — Prisma 7 with pg adapter
+ * Uses @prisma/adapter-pg for PostgreSQL
  * ═══════════════════════════════════════ */
 
 import { PrismaClient } from '@prisma/client';
+import { PrismaPg } from '@prisma/adapter-pg';
+import pg from 'pg';
 
 const globalForPrisma = globalThis as unknown as { _prisma?: PrismaClient };
 
-function getPrisma(): PrismaClient {
-  if (!globalForPrisma._prisma) {
-    globalForPrisma._prisma = new PrismaClient();
+function createPrismaClient(): PrismaClient {
+  const connectionString = process.env.DATABASE_URL;
+  if (!connectionString) {
+    throw new Error('DATABASE_URL environment variable is not set');
   }
-  return globalForPrisma._prisma;
+
+  const pool = new pg.Pool({ connectionString });
+  const adapter = new PrismaPg(pool);
+  return new PrismaClient({ adapter });
 }
 
-export default {
-  get registration() {
-    return getPrisma().registration;
-  },
-  get questConfig() {
-    return getPrisma().questConfig;
-  },
-  get $connect() {
-    return getPrisma().$connect.bind(getPrisma());
-  },
-  get $disconnect() {
-    return getPrisma().$disconnect.bind(getPrisma());
-  },
-} as unknown as PrismaClient;
+if (!globalForPrisma._prisma) {
+  globalForPrisma._prisma = createPrismaClient();
+}
+
+const prisma: PrismaClient = globalForPrisma._prisma;
+
+export default prisma;
