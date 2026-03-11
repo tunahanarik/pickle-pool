@@ -1,0 +1,147 @@
+/* ═══════════════════════════════════════
+ * Collection Preview Styles
+ * ═══════════════════════════════════════ */
+
+.collection {
+    padding: var(--space-20) 0;
+}
+
+.collection-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-6);
+    margin-top: var(--space-12);
+}
+
+/* ── NFT Card ── */
+.nft-card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    cursor: pointer;
+}
+
+.nft-card:hover {
+    transform: translateY(-8px) scale(1.02);
+    border-color: rgba(124, 179, 66, 0.4);
+    box-shadow:
+        0 20px 40px rgba(0, 0, 0, 0.4),
+        0 0 30px rgba(124, 179, 66, 0.15);
+}
+
+.nft-image-wrapper {
+    position: relative;
+    aspect-ratio: 1;
+    overflow: hidden;
+    background: var(--color-bg-card);
+}
+
+.nft-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.nft-card:hover .nft-image {
+    transform: scale(1.08);
+}
+
+/* Rarity badge overlay */
+.nft-rarity {
+    position: absolute;
+    top: var(--space-3);
+    right: var(--space-3);
+    padding: var(--space-1) var(--space-3);
+    font-size: var(--text-xs);
+    font-weight: var(--weight-bold);
+    border-radius: var(--radius-full);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    backdrop-filter: blur(10px);
+}
+
+.rarity-Common {
+    background: rgba(156, 163, 175, 0.3);
+    color: #D1D5DB;
+    border: 1px solid rgba(156, 163, 175, 0.4);
+}
+
+.rarity-Uncommon {
+    background: rgba(52, 211, 153, 0.2);
+    color: #6EE7B7;
+    border: 1px solid rgba(52, 211, 153, 0.4);
+}
+
+.rarity-Rare {
+    background: rgba(59, 130, 246, 0.2);
+    color: #93C5FD;
+    border: 1px solid rgba(59, 130, 246, 0.4);
+}
+
+.rarity-Epic {
+    background: rgba(168, 85, 247, 0.2);
+    color: #C4B5FD;
+    border: 1px solid rgba(168, 85, 247, 0.4);
+}
+
+.rarity-Legendary {
+    background: rgba(251, 191, 36, 0.2);
+    color: #FDE68A;
+    border: 1px solid rgba(251, 191, 36, 0.4);
+    box-shadow: 0 0 12px rgba(251, 191, 36, 0.2);
+}
+
+/* Card info */
+.nft-info {
+    padding: var(--space-4);
+}
+
+.nft-name {
+    font-family: var(--font-heading);
+    font-size: var(--text-base);
+    font-weight: var(--weight-semibold);
+    color: var(--color-text-primary);
+    margin-bottom: var(--space-2);
+}
+
+.nft-traits {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-1);
+}
+
+.nft-trait {
+    padding: 2px var(--space-2);
+    font-size: 0.65rem;
+    color: var(--color-text-muted);
+    background: rgba(124, 179, 66, 0.08);
+    border: 1px solid rgba(124, 179, 66, 0.15);
+    border-radius: var(--radius-sm);
+}
+
+/* ── Responsive ── */
+@media (max-width: 1024px) {
+    .collection-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 640px) {
+    .collection-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--space-3);
+    }
+
+    .nft-info {
+        padding: var(--space-3);
+    }
+
+    .nft-name {
+        font-size: var(--text-sm);
+    }
+}

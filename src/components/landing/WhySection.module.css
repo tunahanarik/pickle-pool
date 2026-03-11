@@ -1,0 +1,67 @@
+/* ═══════════════════════════════════════
+ * Why This Collection Styles
+ * ═══════════════════════════════════════ */
+
+.why {
+    padding: var(--space-20) 0;
+    position: relative;
+}
+
+.why-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-6);
+    margin-top: var(--space-12);
+}
+
+.why-card {
+    display: flex;
+    gap: var(--space-5);
+    padding: var(--space-8);
+    background: var(--glass-bg);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-xl);
+    transition: all var(--transition-base);
+}
+
+.why-card:hover {
+    border-color: rgba(124, 179, 66, 0.3);
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg), var(--shadow-glow);
+}
+
+.why-icon {
+    flex-shrink: 0;
+    width: 52px;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--text-2xl);
+    background: rgba(124, 179, 66, 0.1);
+    border: 1px solid rgba(124, 179, 66, 0.2);
+    border-radius: var(--radius-lg);
+}
+
+.why-content h3 {
+    font-size: var(--text-lg);
+    margin-bottom: var(--space-2);
+}
+
+.why-content p {
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+    line-height: 1.6;
+}
+
+@media (max-width: 768px) {
+    .why-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .why-card {
+        padding: var(--space-6);
+    }
+}
