@@ -46,8 +46,6 @@ export default function QuestWizard() {
   const [evmAddress, setEvmAddress] = useState('');
   const [completedTasks, setCompletedTasks] = useState<string[]>([]);
   const [error, setError] = useState('');
-  const [commentClicked, setCommentClicked] = useState(false);
-  const [commentProofUrl, setCommentProofUrl] = useState('');
   const [transitioning, setTransitioning] = useState(false);
   const [config, setConfig] = useState<QuestConfig>(DEFAULT_CONFIG);
 
@@ -78,25 +76,8 @@ export default function QuestWizard() {
 
   const handleTaskClick = useCallback((taskId: string, url: string) => {
     window.open(url, '_blank');
-    if (taskId === 'comment') {
-      // Comment task — open proof input instead of auto-marking done
-      setCommentClicked(true);
-    } else {
-      // Other tasks — mark as done after clicking
-      setTimeout(() => markTaskDone(taskId), 1000);
-    }
+    setTimeout(() => markTaskDone(taskId), 1000);
   }, [markTaskDone]);
-
-  const handleCommentProofSubmit = () => {
-    const url = commentProofUrl.trim();
-    if (!url || (!url.includes('x.com') && !url.includes('twitter.com'))) {
-      setError('Please paste a valid tweet/post link.');
-      return;
-    }
-    setError('');
-    markTaskDone('comment');
-    setCommentClicked(false);
-  };
 
   const handleUsernameSubmit = () => {
     const cleaned = username.replace(/^@/, '').trim();
@@ -310,29 +291,6 @@ export default function QuestWizard() {
                         </button>
                       )}
                     </div>
-                    {/* Comment proof input */}
-                    {task.id === 'comment' && commentClicked && !isDone && (
-                      <div className={styles['quest-proof']}>
-                        <label className={styles['quest-proof-label']}>Paste your comment link as proof</label>
-                        <div className={styles['quest-proof-row']}>
-                          <input
-                            type="text"
-                            className={styles['quest-input']}
-                            placeholder="https://x.com/..."
-                            value={commentProofUrl}
-                            onChange={(e) => { setCommentProofUrl(e.target.value); setError(''); }}
-                            onKeyDown={(e) => e.key === 'Enter' && handleCommentProofSubmit()}
-                          />
-                          <button
-                            className={`${styles['quest-task-btn']} ${styles['quest-task-btn-comment']}`}
-                            onClick={handleCommentProofSubmit}
-                            style={{ padding: '10px 16px', fontSize: '13px' }}
-                          >
-                            Verify
-                          </button>
-                        </div>
-                      </div>
-                    )}
                   </div>
                 );
               })}
