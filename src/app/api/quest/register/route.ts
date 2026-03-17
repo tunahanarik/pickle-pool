@@ -71,19 +71,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Check for duplicate twitter handle
-    const existingByHandle = await prisma.registration.findUnique({
-      where: { twitterHandle: cleanHandle },
-    });
-
-    if (existingByHandle) {
-      return NextResponse.json(
-        { success: false, error: 'This Twitter username has already been registered.' },
-        { status: 409 }
-      );
-    }
-
-    // Create registration
+    // Create registration (allows same user multiple times)
     const registration = await prisma.registration.create({
       data: {
         twitterHandle: cleanHandle,

@@ -10,12 +10,13 @@ datasource db {
 
 model Registration {
   id              Int      @id @default(autoincrement())
-  twitterHandle   String   @unique @map("twitter_handle")
+  twitterHandle   String   @map("twitter_handle")
   evmAddress      String   @map("evm_address")
   completedQuests Json     @default("[]") @map("completed_quests")
   ipAddress       String?  @map("ip_address")
   createdAt       DateTime @default(now()) @map("created_at")
 
+  @@index([twitterHandle])
   @@index([evmAddress])
   @@index([createdAt])
   @@map("registrations")

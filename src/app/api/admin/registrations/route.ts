@@ -1,6 +1,7 @@
 /* ═══════════════════════════════════════
  * GET /api/admin/registrations
  * List all registrations (paginated, searchable)
+ * Groups by twitterHandle and shows entry count
  * ═══════════════════════════════════════ */
 
 import { NextRequest, NextResponse } from 'next/server';
@@ -42,10 +43,34 @@ export async function GET(request: NextRequest) {
       prisma.registration.count({ where }),
     ]);
 
+    // Count how many times each twitterHandle has registered
+    const handleCounts = new Map<string, number>();
+    const allHandles = registrations.map((r) => r.twitterHandle);
+    
+    if (allHandles.length > 0) {
+      // Get counts for all handles in this page
+      const uniqueHandles = [...new Set(allHandles)];
+      const counts = await Promise.all(
+        uniqueHandles.map(async (handle) => {
+          const count = await prisma.registration.count({
+            where: { twitterHandle: handle },
+          });
+          return { handle, count };
+        })
+      );
+      counts.forEach(({ handle, count }) => handleCounts.set(handle, count));
+    }
+
+    // Attach entryCount to each registration
+    const enrichedRegistrations = registrations.map((reg) => ({
+      ...reg,
+      entryCount: handleCounts.get(reg.twitterHandle) || 1,
+    }));
+
     return NextResponse.json({
       success: true,
       data: {
-        registrations,
+        registrations: enrichedRegistrations,
         pagination: {
           page,
           limit,

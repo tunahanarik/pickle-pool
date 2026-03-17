@@ -12,6 +12,7 @@ interface Registration {
   completedQuests: string[];
   ipAddress: string | null;
   createdAt: string;
+  entryCount: number;
 }
 
 interface Pagination {
@@ -315,13 +316,14 @@ export default function AdminPage() {
                 <th>Twitter</th>
                 <th>EVM Address</th>
                 <th>Quests</th>
+                <th>Entries</th>
                 <th>Date</th>
               </tr>
             </thead>
             <tbody>
               {registrations.length === 0 ? (
                 <tr>
-                  <td colSpan={5} style={{ textAlign: 'center', padding: 'var(--space-8)', color: 'var(--color-text-muted)' }}>
+                  <td colSpan={6} style={{ textAlign: 'center', padding: 'var(--space-8)', color: 'var(--color-text-muted)' }}>
                     No registrations yet
                   </td>
                 </tr>
@@ -334,6 +336,18 @@ export default function AdminPage() {
                       {reg.evmAddress.slice(0, 6)}...{reg.evmAddress.slice(-4)}
                     </td>
                     <td>{Array.isArray(reg.completedQuests) ? reg.completedQuests.length : 0}/4</td>
+                    <td>
+                      <span style={{
+                        background: reg.entryCount > 1 ? 'rgba(234, 179, 8, 0.2)' : 'rgba(255,255,255,0.06)',
+                        color: reg.entryCount > 1 ? '#facc15' : 'inherit',
+                        padding: '2px 8px',
+                        borderRadius: '8px',
+                        fontWeight: reg.entryCount > 1 ? 600 : 400,
+                        fontSize: '13px',
+                      }}>
+                        {reg.entryCount}×
+                      </span>
+                    </td>
                     <td>{new Date(reg.createdAt).toLocaleDateString()}</td>
                   </tr>
                 ))
